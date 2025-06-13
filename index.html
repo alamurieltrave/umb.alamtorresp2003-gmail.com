@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinity IT Solutions</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 80px; /* altura del footer */
+    }
+    header { background-color: #004aad; color: white; padding: 20px; display: flex; align-items: center; justify-content: space-between; }
+    header img { height: 60px; }
+    nav { background-color: #003377; padding: 10px; position: sticky; top: 0; width: 100%; z-index: 1000; display: flex; justify-content: center; flex-wrap: wrap; }
+    nav a { color: white; margin: 5px 10px; text-decoration: none; cursor: pointer; padding: 8px 12px; border-radius: 4px; transition: background-color 0.3s; }
+    nav a:hover { background-color: #0055cc; }
+    .container { padding: 20px; }
+    .section-title { font-size: 1.5em; color: #004aad; margin-top: 40px; }
+    form input, form textarea { width: 100%; padding: 10px; margin: 10px 0; }
+    form button { padding: 10px 20px; background-color: #004aad; color: white; border: none; cursor: pointer; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .product { border: 1px solid #ccc; padding: 10px; display: flex; flex-direction: column; align-items: center; transition: transform 0.3s, box-shadow 0.3s; }
+    .product:hover { transform: scale(1.03); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .product img { width: 100%; height: auto; max-height: 150px; object-fit: cover; }
+    .product .price { font-weight: bold; margin: 10px 0; }
+    footer {
+      background-color: #003377;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+    section { display: none; }
+    section.active { display: block; }
+    #cart-items { margin-top: 20px; }
+    .cart-item { border-bottom: 1px solid #ccc; padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+    .cart-item button { background-color: #d9534f; color: white; border: none; padding: 5px 10px; cursor: pointer; }
+    #total { font-weight: bold; margin-top: 20px; font-size: 1.2em; }
+    #paypal-button { margin-top: 20px; }
+  </style>
+  <script>
+    let carrito = [];
+
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      if (id === 'carrito') actualizarCarrito();
+    }
+
+    function agregarAlCarrito(nombre, precio) {
+      carrito.push({ nombre, precio });
+      alert(nombre + ' agregado al carrito.');
+    }
+
+    function eliminarDelCarrito(index) {
+      carrito.splice(index, 1);
+      actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+      const lista = document.getElementById('cart-items');
+      lista.innerHTML = '';
+      let total = 0;
+      carrito.forEach((item, index) => {
+        total += item.precio;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <span>${item.nombre} - $${item.precio.toFixed(2)}</span>
+          <button onclick="eliminarDelCarrito(${index})">Eliminar</button>
+        `;
+        lista.appendChild(div);
+      });
+      document.getElementById('total').textContent = 'Total: $' + total.toFixed(2);
+
+      const paypalBtn = document.getElementById('paypal-button');
+      paypalBtn.innerHTML = '';
+      if (carrito.length > 0) {
+        const form = document.createElement('form');
+        form.action = 'https://www.paypal.com/cgi-bin/webscr';
+        form.method = 'post';
+        form.target = '_blank';
+
+        form.innerHTML = `
+          <input type="hidden" name="cmd" value="_xclick">
+          <input type="hidden" name="business" value="TU_CORREO_PAYPAL">
+          <input type="hidden" name="item_name" value="Compra en Infinity IT Solutions">
+          <input type="hidden" name="amount" value="${total.toFixed(2)}">
+          <input type="hidden" name="currency_code" value="USD">
+          <button type="submit">Pagar con PayPal</button>
+        `;
+        paypalBtn.appendChild(form);
+      }
+    }
+
+    window.onload = () => {
+      showSection('quienes-somos');
+    }
+  </script>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>Infinity IT Solutions</h1>
+        </div>
+        <div>
+            <img src="D:\Pagina Web Urban\Imagenes pagina web/logo1.jpg" alt="Logo de la empresa">
+        </div>
+    </header>
+
+    <nav>
+        <a onclick="showSection('quienes-somos')">¿Quiénes somos?</a>
+        <a onclick="showSection('mision-vision')">Misión y Visión</a>
+        <a onclick="showSection('ubicacion')">Ubicación</a>
+        <a onclick="showSection('desarrollo')">Desarrollo</a>
+        <a onclick="showSection('productos-tecnologicos')">Productos Tecnológicos</a>
+        <a onclick="showSection('venta')">Venta</a>
+        <a onclick="showSection('mantenimiento')">Mantenimiento</a>
+        <a onclick="showSection('capacitacion')">Capacitación</a>
+        <a onclick="showSection('contacto')">Contacto</a>
+        <a onclick="showSection('carrito')">Carrito</a>
+    </nav>
+
+    <div class="container">
+        <!-- Secciones del sitio -->
+
+        <section id="quienes-somos">
+            <h2 class="section-title">¿Quiénes somos?</h2>
+            <p>Somos una empresa dedicada a ofrecer soluciones tecnológicas innovadoras y de alta calidad en consultoría, desarrollo, mantenimiento, capacitación y venta de productos tecnológicos.</p>
+        </section>
+
+        <section id="mision-vision">
+            <h2 class="section-title">Misión</h2>
+            <p>Proveer soluciones tecnologicas que impulsen el crecimiento de nuestros clientes.</p>
+            <h2 class="section-title">Visión</h2>
+            <p>Ser líderes en servicios tecnológicos innovadores en el mercado nacional e internacional.</p>
+        </section>
+
+        <section id="ubicacion">
+            <h2 class="section-title">Ubicación</h2>
+            <p>Nos encontramos en Calle Av. del Convento S/N, El Trebol, 54614 Tepotzotlán, Méx..</p>
+            <img src="D:\Pagina Web Urban\Imagenes pagina web\ubicacion.png" alt="Croquis de ubicación" style="max-width:100%; height:auto;">
+        </section>
+
+        <section id="desarrollo">
+            <h2 class="section-title">Desarrollo de Sistemas</h2>
+            <div class="product-grid">
+                <!-- Ejemplo de 3 productos, puedes duplicar hasta 20 -->
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web\sistemas-de-gestion-escolar.webp" style="width: 100px; height: 100px;">
+                    <h3>Sistema de Gestión Escolar</h3>
+                    <p class="price">$1200</p>
+                    <button onclick="agregarAlCarrito('Sistema de Gestión Escolar', 1200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/rpe 3.png" alt="Producto Desarrollo 2">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/software-de-inventario.png" alt="Producto Desarrollo 3">
+                    <h3>Sistema de Inventario</h3>
+                    <p class="price">$800</p>
+                    <button onclick="agregarAlCarrito('Sistema de Inventario', 800)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web\erp-pymes-4.jpg" alt="Producto Desarrollo 4">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/erp-5.png" alt="Producto Desarrollo 5">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/erp-6.png" alt="Producto Desarrollo 6">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/tendencias-software-gestion-erp 7.png" alt="Producto Desarrollo 7">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/ERP 8.png" alt="Producto Desarrollo 8">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/ERP 9.png" alt="Producto Desarrollo 9">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/ERP 10.png" alt="Producto Desarrollo 10">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web\rpe11.jpeg" alt="Producto Desarrollo 11">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/ERP 12.png" alt="Producto Desarrollo 12">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/erp-tipos 13.png" alt="Producto Desarrollo 13">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/ERP 14.png" alt="Producto Desarrollo 14">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/-ERP-para-pymes 15.png" alt="Producto Desarrollo 15">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/ERP 16.jpg" alt="Producto Desarrollo 16">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/erp 17.png" alt="Producto Desarrollo 17">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/erp-tipos 18.png" alt="Producto Desarrollo 18">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/ERP-software 19.png" alt="Producto Desarrollo 19">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/erp-tipos 20.png" alt="Producto Desarrollo 20">
+                    <h3>ERP para PYMEs</h3>
+                    <p class="price">$2200</p>
+                    <button onclick="agregarAlCarrito('ERP para PYMEs', 2200)">Agregar al carrito</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="productos-tecnologicos">
+            <h2 class="section-title">Productos Tecnológicos</h2>
+            <div class="product-grid">
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/R32 Home Router.png" alt="Producto 1">
+                    <h3>Router Wi-Fi Avanzado</h3>
+                    <p class="price">$150</p>
+                    <button onclick="agregarAlCarrito('Router Wi-Fi Avanzado', 150)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/amazon.jpeg" alt="Producto Desarrollo 2">
+                    <h3>Amazon Echo (4ª Gen</h3>
+                    <p class="price">$3,999</p>
+                    <button onclick="agregarAlCarrito('Amazon Echo (4ª Gen)', 3999)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Xiaomi Robot Aspirador E5.jpg" alt="Producto Desarrollo 3">
+                    <h3>Xiaomi Robot Aspirador E5</h3>
+                    <p class="price">$2,499</p>
+                    <button onclick="agregarAlCarrito('Xiaomi Robot Aspirador E5',2499)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/foco.jpeg" alt="Producto Desarrollo 4">
+                    <h3>Evolux Foco LED Inteligente Wi‑Fi </h3>
+                    <p class="price">$299</p>
+                    <button onclick="agregarAlCarrito('Evolux Foco LED Inteligente Wi‑Fi', 299)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/51vV553UweL.__AC_SY445_SX342_QL70_ML2_.jpg" alt="Producto Desarrollo 5">
+                    <h3>Amazon Smart Plug (enchufe inteligente)</h3>
+                    <p class="price">$550</p>
+                    <button onclick="agregarAlCarrito('Amazon Smart Plug (enchufe inteligente)', 550)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/61G0vnZwzFL.__AC_SX300_SY300_QL70_ML2_ termo.jpg" alt="Producto Desarrollo 6">
+                    <h3>Nest Learning Thermostat </h3>
+                    <p class="price">$1,879</p>
+                    <button onclick="agregarAlCarrito('Nest Learning Thermostat', 1879)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Robotic Mower Sileno Minimo.webp" alt="Producto Desarrollo 7">
+                    <h3>Robotic Mower Sileno Minimo</h3>
+                    <p class="price">$13,175</p>
+                    <button onclick="agregarAlCarrito('Robotic Mower Sileno Minimo', 13175)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/lenovo.jpeg" alt="Producto Desarrollo 8">
+                    <h3>Lenovo Ideapad / Core i5 12450H, 8 GB, 512 GB</h3>
+                    <p class="price">9,000 MXN</p>
+                    <button onclick="agregarAlCarrito('Lenovo Ideapad / Core i5 12450H, 8 GB, 512 GB', 9000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Apple MacBook Air (M2, 8+256 GB).jpg" alt="Producto Desarrollo 9">
+                    <h3>Apple MacBook Air (M2, 8+256 GB)</h3>
+                    <p class="price">$28,000</p>
+                    <button onclick="agregarAlCarrito('apple MacBook air ', 28000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Phone 16 (128 GB).jpeg" alt="Producto Desarrollo 10">
+                    <h3>Phone 16 (128 GB)</h3>
+                    <p class="price">$20999</p>
+                    <button onclick="agregarAlCarrito('Phone 16 (128 GB)', 20999)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/JBL Tune 520BT.jpeg" alt="Producto Desarrollo 11">
+                    <h3>JBL Tune 520BT</h3>
+                    <p class="price">$677</p>
+                    <button onclick="agregarAlCarrito('JBL Tune 520BT', 677)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/AirPods Pro (2ª gen).jpeg" alt="Producto Desarrollo 12">
+                    <h3>AirPods Pro (2ª gen) </h3>
+                    <p class="price">$7500</p>
+                    <button onclick="agregarAlCarrito('AirPods Pro (2ª gen) ',7500)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Sony WH‑1000XM5.jpeg" alt="Producto Desarrollo 13">
+                    <h3>Sony WH‑1000XM5</h3>
+                    <p class="price">$9000</p>
+                    <button onclick="agregarAlCarrito('Sony WH‑1000XM5', 9000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Samsung Galaxy Tab A9.jpg " alt="Producto Desarrollo 14">
+                    <h3>Samsung Galaxy Tab A9 </h3>
+                    <p class="price">$2490</p>
+                    <button onclick="agregarAlCarrito('Samsung Galaxy Tab A9 ', 2490)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/iPad 10ª generación (64 GB).jpeg" alt="Producto Desarrollo 15">
+                    <h3>iPad 10ª generación (64 GB)</h3>
+                    <p class="price">$10500</p>
+                    <button onclick="agregarAlCarrito('iPad 10ª generación (64 GB)', 10500)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Nintendo Switch 2.jpeg" alt="Producto Desarrollo 16">
+                    <h3>Nintendo Switch 2 </h3>
+                    <p class="price">$8200</p>
+                    <button onclick="agregarAlCarrito('Nintendo Switch 2 ', 8200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Apple Watch Series 9.jpeg" alt="Producto Desarrollo 17">
+                    <h3>Apple Watch Series 9</h3>
+                    <p class="price">$9400</p>
+                    <button onclick="agregarAlCarrito('Apple Watch Series 9', 9400)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Fitbit Charge 6.jpeg" alt="Producto Desarrollo 18">
+                    <h3>Fitbit Charge 6</h3>
+                    <p class="price">$3100</p>
+                    <button onclick="agregarAlCarrito('Fitbit Charge 6', 3100)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Google Nest Hub (2ª gen).jpeg" alt="Producto Desarrollo 19">
+                    <h3>Google Nest Hub (2ª gen) </h3>
+                    <p class="price">$2600</p>
+                    <button onclick="agregarAlCarrito('Google Nest Hub (2ª gen) ', 2600)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/August Smart Lock Pro.jpeg" alt="Producto Desarrollo 20">
+                    <h3>August Smart Lock Pro</h3>
+                    <p class="price">$4000</p>
+                    <button onclick="agregarAlCarrito('August Smart Lock Pro', 4000)">Agregar al carrito</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="venta">
+            <h2 class="section-title">Venta de Productos Tecnológicos</h2>
+            <div class="product-grid">
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Laptop Lenovo ThinkPad.jpeg" alt="Producto Venta 1">
+                    <h3>Laptop Lenovo ThinkPad</h3>
+                    <p class="price">$950</p>
+                    <button onclick="agregarAlCarrito('Laptop Lenovo ThinkPad', 950)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/amazon.jpeg" alt="Producto Desarrollo 2">
+                    <h3>Amazon Echo (4ª Gen</h3>
+                    <p class="price">$3999</p>
+                    <button onclick="agregarAlCarrito('Amazon Echo (4ª Gen',3999)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/lenovo.jpeg" alt="Producto Desarrollo 3">
+                    <h3>Lenovo Ideapad / Core i5 12450H, 8 GB, 512 GB</h3>
+                    <p class="price">$9000</p>
+                    <button onclick="agregarAlCarrito('Lenovo Ideapad / Core i5 12450H, 8 GB, 512 GB', 9000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Apple MacBook Air (M2, 8+256 GB).jpg" alt="Producto Desarrollo 4">
+                    <h3>Apple MacBook Air (M2, 8+256 GB)</h3>
+                    <p class="price">$28000</p>
+                    <button onclick="agregarAlCarrito('Apple MacBook Air (M2, 8+256 GB)', 28000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Nintendo Switch 2.jpeg" alt="Producto Desarrollo 5">
+                    <h3>Nintendo Switch 2</h3>
+                    <p class="price">$8200</p>
+                    <button onclick="agregarAlCarrito('Nintendo Switch 2', 8200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/August Smart Lock Pro.jpeg" alt="Producto Desarrollo 6">
+                    <h3>August Smart Lock Pro</h3>
+                    <p class="price">$4000</p>
+                    <button onclick="agregarAlCarrito('August Smart Lock Pro', 4000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Phone 16 (128 GB).jpeg" alt="Producto Desarrollo 7">
+                    <h3>Phone 16 (128 GB)</h3>
+                    <p class="price">$20999</p>
+                    <button onclick="agregarAlCarrito('Phone 16 (128 GB)', 20999)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Samsung Galaxy Tab A9.jpg " alt="Producto Desarrollo 8">
+                    <h3>Samsung Galaxy Tab A9 </h3>
+                    <p class="price">$2490</p>
+                    <button onclick="agregarAlCarrito('Samsung Galaxy Tab A9 ', 2490)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/iPad 10ª generación (64 GB).jpeg" alt="Producto Desarrollo 9">
+                    <h3>iPad 10ª generación (64 GB)</h3>
+                    <p class="price">$10500</p>
+                    <button onclick="agregarAlCarrito('iPad 10ª generación (64 GB)', 10500)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Google Nest Hub (2ª gen).jpeg" alt="Producto Desarrollo 10">
+                    <h3>Google Nest Hub (2ª gen)</h3>
+                    <p class="price">$2600</p>
+                    <button onclick="agregarAlCarrito('Google Nest Hub (2ª gen)', 2600)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Fitbit Charge 6.jpeg" alt="Producto Desarrollo 11">
+                    <h3>Fitbit Charge 6</h3>
+                    <p class="price">$31000</p>
+                    <button onclick="agregarAlCarrito('Fitbit Charge 6', 3100)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Apple Watch Series 9.jpeg" alt="Producto Desarrollo 12">
+                    <h3>Apple Watch Series 9</h3>
+                    <p class="price">$9400</p>
+                    <button onclick="agregarAlCarrito('Apple Watch Series 9', 9400)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/AirPods Pro (2ª gen).jpeg" alt="Producto Desarrollo 13">
+                    <h3>AirPods Pro (2ª gen)</h3>
+                    <p class="price">$7500</p>
+                    <button onclick="agregarAlCarrito('AirPods Pro (2ª gen)', 7500)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Sony WH‑1000XM5.jpeg" alt="Producto Desarrollo 14">
+                    <h3>Sony WH‑1000XM5</h3>
+                    <p class="price">$9000</p>
+                    <button onclick="agregarAlCarrito('Sony WH‑1000XM5', 9000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/JBL Tune 520BT.jpeg" alt="Producto Desarrollo 15">
+                    <h3>JBL Tune 520BT</h3>
+                    <p class="price">$677</p>
+                    <button onclick="agregarAlCarrito('JBL Tune 520BT', 677)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/61G0vnZwzFL.__AC_SX300_SY300_QL70_ML2_ termo.jpg" alt="Producto Desarrollo 16">
+                    <h3>Nest Learning Thermosta</h3>
+                    <p class="price">$1879</p>
+                    <button onclick="agregarAlCarrito('Nest Learning Thermosta', 1879)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Xiaomi Robot Aspirador E5.jpg" alt="Producto Desarrollo 17">
+                    <h3>Xiaomi Robot Aspirador E5</h3>
+                    <p class="price">$2499</p>
+                    <button onclick="agregarAlCarrito('Xiaomi Robot Aspirador E5', 2499)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Robotic Mower Sileno Minimo.webp" alt="Producto Desarrollo 18">
+                    <h3>Robotic Mower Sileno Minimo</h3>
+                    <p class="price">$13,175</p>
+                    <button onclick="agregarAlCarrito('Robotic Mower Sileno Minimo', 13175)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/51vV553UweL.__AC_SY445_SX342_QL70_ML2_.jpg" alt="Producto Desarrollo 19">
+                    <h3>Amazon Smart Plug (enchufe inteligente)</h3>
+                    <p class="price">$550</p>
+                    <button onclick="agregarAlCarrito('Amazon Smart Plug (enchufe inteligente)', 550)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/foco.jpeg" alt="Producto Desarrollo 20">
+                    <h3>Evolux Foco LED Inteligente Wi‑Fi</h3>
+                    <p class="price">$299</p>
+                    <button onclick="agregarAlCarrito('Evolux Foco LED Inteligente Wi‑Fi', 299)">Agregar al carrito</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="mantenimiento">
+            <h2 class="section-title">Mantenimiento</h2>
+            <div class="product-grid">
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Mantenimiento preventivo básico (Clietec).jpeg" alt="Mantenimiento 1">
+                    <h3>Mantenimiento preventivo básico (Clietec)</h3>
+                    <p class="price">$449 </p>
+                    <button onclick="agregarAlCarrito('Mantenimiento preventivo básico (Clietec)', 449 )">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Mantenimiento preventivo completo (Clietec).jpg" alt="Producto Desarrollo 2">
+                    <h3>Mantenimiento preventivo completo (Clietec)</h3>
+                    <p class="price">$599</p>
+                    <button onclick="agregarAlCarrito('Mantenimiento preventivo completo (Clietec)', 599)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Limpieza física remota (Dierza, CDMX).jpeg" alt="Producto Desarrollo 3">
+                    <h3>Limpieza física remota (Dierza, CDMX)</h3>
+                    <p class="price">$250</p>
+                    <button onclick="agregarAlCarrito('Limpieza física remota (Dierza, CDMX)', 250)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Limpieza interna en domicilio (Dierza, CDMX).jpeg" alt="Producto Desarrollo 4">
+                    <h3>Limpieza interna en domicilio (Dierza, CDMX)</h3>
+                    <p class="price">$700</p>
+                    <button onclick="agregarAlCarrito('Limpieza interna en domicilio (Dierza, CDMX)',700 )">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Formateo de disco duro (Dierza, CDMX).jpeg" alt="Producto Desarrollo 5">
+                    <h3>Formateo de disco duro (Dierza, CDMX) </h3>
+                    <p class="price">$220</p>
+                    <button onclick="agregarAlCarrito('Formateo de disco duro (Dierza, CDMX) ', 220)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Respaldomigración de datos hasta 1 TB (Dierza, CDMX).jpeg" alt="Producto Desarrollo 6">
+                    <h3>Respaldo/migración de datos hasta 1 TB (Dierza, CDMX)</h3>
+                    <p class="price">$800</p>
+                    <button onclick="agregarAlCarrito('Respaldo/migración de datos hasta 1 TB (Dierza, CDMX)', 800)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Cambio de tarjeta madre (mano de obra, CDMX).jpeg" alt="Producto Desarrollo 7">
+                    <h3>Cambio de tarjeta madre (mano de obra, CDMX) </h3>
+                    <p class="price">$1200</p>
+                    <button onclick="agregarAlCarrito('Cambio de tarjeta madre (mano de obra, CDMX) ', 1200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Diagnóstico o revisión básica (IdeaGrupo).png" alt="Producto Desarrollo 8">
+                    <h3>Diagnóstico o revisión básica (IdeaGrupo)</h3>
+                    <p class="price">$300</p>
+                    <button onclick="agregarAlCarrito('Diagnóstico o revisión básica (IdeaGrupo)', 300)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Paquete preventivo (Egutz).jpeg" alt="Producto Desarrollo 9">
+                    <h3>Paquete preventivo (Egutz)</h3>
+                    <p class="price">$400</p>
+                    <button onclick="agregarAlCarrito('Paquete preventivo (Egutz)', 400)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Paquete correctivo (Egutz).jpeg" alt="Producto Desarrollo 10">
+                    <h3>Paquete correctivo (Egutz)</h3>
+                    <p class="price">$700</p>
+                    <button onclick="agregarAlCarrito('Paquete correctivo (Egutz)', 700)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Paquete todo en uno (Indez).jpeg" alt="Producto Desarrollo 11">
+                    <h3>Paquete todo en uno (Indez),</h3>
+                    <p class="price">$8500</p>
+                    <button onclick="agregarAlCarrito('Paquete todo en uno (Indez)', 850)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Configuración y personalización de PC.jpeg" alt="Producto Desarrollo 12">
+                    <h3>Configuración y personalización de PC (Compuserver, 2020)</h3>
+                    <p class="price">$280</p>
+                    <button onclick="agregarAlCarrito('Configuración y personalización de PC (Compuserver, 2020)', 280)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Clonación de discos duros.jpeg" alt="Producto Desarrollo 13">
+                    <h3>Clonación de discos duros</h3>
+                    <p class="price">$350</p>
+                    <button onclick="agregarAlCarrito('Clonación de discos duros', 350)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Servicio técnico por hora (Compuserver).png" alt="Producto Desarrollo 14">
+                    <h3>Servicio técnico por hora (Compuserver)</h3>
+                    <p class="price">$200</p>
+                    <button onclick="agregarAlCarrito('Servicio técnico por hora (Compuserver)', 200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Desinstalación de programas.jpeg" alt="Producto Desarrollo 15">
+                    <h3>Desinstalación de programas </h3>
+                    <p class="price">$150</p>
+                    <button onclick="agregarAlCarrito('Desinstalación de programas ', 150)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Instalación configuración de redes (Compuserver).jpeg" alt="Producto Desarrollo 16">
+                    <h3>Instalación/configuración de redes (Compuserver)</h3>
+                    <p class="price">$precio a cotizar </p>
+                    <button onclick="agregarAlCarrito('Instalación/configuración de redes (Compuserver)', precio a cotizar )">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Instalación y configuración de extensor Wi‑Fi (Office Depot).jpeg" alt="Producto Desarrollo 17">
+                    <h3>Instalación y configuración de extensor Wi‑Fi (Office Depot) </h3>
+                    <p class="price">$899</p>
+                    <button onclick="agregarAlCarrito('Instalación y configuración de extensor Wi‑Fi (Office Depot) ', 899)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Instalación de red cableada u otros servicios de red.jpeg" alt="Producto Desarrollo 18">
+                    <h3>Instalación de red cableada u otros servicios de red </h3>
+                    <p class="price">$300-3000</p>
+                    <button onclick="agregarAlCarrito('Instalación de red cableada u otros servicios de red ', 300-3000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Internet 5G fijo residencial (Telcel T‑Mobile).jpeg" alt="Producto Desarrollo 19">
+                    <h3>Internet 5G fijo residencial (Telcel / T‑Mobile)</h3>
+                    <p class="price">$399 al mes </p>
+                    <button onclick="agregarAlCarrito('Internet 5G fijo residencial (Telcel / T‑Mobile)', 399 al mes)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Soporte instalación cámaras, redes, domótica (Cronoshare).jpeg" alt="Producto Desarrollo 20">
+                    <h3>Soporte instalación cámaras, redes, domótica (Cronoshare) </h3>
+                    <p class="price">$500 y 1600</p>
+                    <button onclick="agregarAlCarrito('Soporte instalación cámaras, redes, domótica (Cronoshare) ', 500 y 1600)">Agregar al carrito</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="capacitacion">
+            <h2 class="section-title">Capacitación e Instalación</h2>
+            <div class="product-grid">
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Curso de Office Básico.jpeg" alt="Capacitación 1">
+                    <h3>Curso de Office Básico</h3>
+                    <p class="price">$1000</p>
+                    <button onclick="agregarAlCarrito('Curso de Office Básico', 1000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Manejo de Bases de Datos y TIC’s.jpeg" alt="Producto Desarrollo 2">
+                    <h3>Manejo de Bases de Datos y TIC’s </h3>
+                    <p class="price">$3000</p>
+                    <button onclick="agregarAlCarrito('Manejo de Bases de Datos y TIC’s ', 3000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Administración del Tiempo y Manejo del Estrés.jpeg" alt="Producto Desarrollo 3">
+                    <h3>Administración del Tiempo y Manejo del Estrés</h3>
+                    <p class="price">$3200</p>
+                    <button onclick="agregarAlCarrito('Administración del Tiempo y Manejo del Estrés', 3200)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Capacitación en COVID‑19, prevención y estrés.jpeg" alt="Producto Desarrollo 4">
+                    <h3>Capacitación en COVID‑19, prevención y estrés</h3>
+                    <p class="price">$gratuito</p>
+                    <button onclick="agregarAlCarrito('Capacitación en COVID‑19, prevención y estrés', gratuito)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Programa de Orientación Formativo‑Laboral  ICAT CDMX.jpeg" alt="Producto Desarrollo 5">
+                    <h3>Programa de Orientación Formativo‑Laboral – ICAT CDMX</h3>
+                    <p class="price">Gratuito</p>
+                    <button onclick="agregarAlCarrito('Programa de Orientación Formativo‑Laboral – ICAT CDMX', Gratuito)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/curso de seguridad.jpeg" alt="Producto Desarrollo 6">
+                    <h3>Programa de Orientación Formativo‑Laboral – ICAT CDMX</h3>
+                    <p class="price">
+                        $6500
+                        <button onclick="agregarAlCarrito('Curso de Seguridad de la Información',6500)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Curso “In Company” en TI.jpeg" alt="Producto Desarrollo 7">
+                    <h3>Curso “In Company” en TI</h3>
+                    <p class="price">$5500</p>
+                    <button onclick="agregarAlCarrito('Curso “In Company” en TI', 5500)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Curso de IA práctica.jpeg" alt="Producto Desarrollo 8">
+                    <h3>Curso de IA práctica </h3>
+                    <p class="price">$12000</p>
+                    <button onclick="agregarAlCarrito('Curso de IA práctica ', 12000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Carrera de Inteligencia Artificial Aplicada.jpeg" alt="Producto Desarrollo 9">
+                    <h3>Carrera de Inteligencia Artificial Aplicada</h3>
+                    <p class="price">$20000</p>
+                    <button onclick="agregarAlCarrito('Carrera de Inteligencia Artificial Aplicada', 20000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Curso Introducción a IA generativa.jpeg" alt="Producto Desarrollo 10">
+                    <h3>Curso Introducción a IA generativa</h3>
+                    <p class="price">$4262</p>
+                    <button onclick="agregarAlCarrito('Curso Introducción a IA generativa', 4262)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Cursos de programación, Data Science.jpeg" alt="Producto Desarrollo 11">
+                    <h3>Cursos de programación, Data Science</h3>
+                    <p class="price">$5600</p>
+                    <button onclick="agregarAlCarrito('Cursos de programación, Data Science', 5600)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Diplomado Habilidades Básicas en Informática.jpeg" alt="Producto Desarrollo 12">
+                    <h3>Diplomado Habilidades Básicas en Informática </h3>
+                    <p class="price">$3300</p>
+                    <button onclick="agregarAlCarrito('Diplomado Habilidades Básicas en Informática ', 3300)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Diplomado Tecnología y Sistemas.jpeg" alt="Producto Desarrollo 13">
+                    <h3>Diplomado Tecnología y Sistemas</h3>
+                    <p class="price">$30000</p>
+                    <button onclick="agregarAlCarrito('Diplomado Tecnología y Sistemas', 30000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Formación en Coaching y PNL.jpeg" alt="Producto Desarrollo 14">
+                    <h3>Formación en Coaching y PNL</h3>
+                    <p class="price">$8000</p>
+                    <button onclick="agregarAlCarrito('Formación en Coaching y PNL', 8000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Herramientas para impartición de cursos.jpeg" alt="Producto Desarrollo 15">
+                    <h3>Herramientas para impartición de cursos </h3>
+                    <p class="price">$2300</p>
+                    <button onclick="agregarAlCarrito('Herramientas para impartición de cursos ', 2300)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Programación básica en Python.jpeg" alt="Producto Desarrollo 16">
+                    <h3>Programación básica en Python</h3>
+                    <p class="price">$2850</p>
+                    <button onclick="agregarAlCarrito('Programación básica en Python', 2850)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Blockchain para principiantes.jpeg" alt="Producto Desarrollo 17">
+                    <h3>Blockchain para principiantes </h3>
+                    <p class="price">$999</p>
+                    <button onclick="agregarAlCarrito('Blockchain para principiantes ', 999)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Curso de Criptomonedas de Cero a Blockchain.jpeg" alt="Producto Desarrollo 18">
+                    <h3>Curso de Criptomonedas de Cero a Blockchain</h3>
+                    <p class="price">$9500</p>
+                    <button onclick="agregarAlCarrito('Curso de Criptomonedas de Cero a Blockchain', 9500)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Curso de Desarrollo Web.jpeg" alt="Producto Desarrollo 19">
+                    <h3>Curso de Desarrollo Web </h3>
+                    <p class="price">$6000</p>
+                    <button onclick="agregarAlCarrito('Curso de Desarrollo Web ', 6000)">Agregar al carrito</button>
+                </div>
+                <div class="product">
+                    <img src="D:\Pagina Web Urban\Imagenes pagina web/Microcertificado en Machine Learning para Big Data.jpeg" alt="Producto Desarrollo 20">
+                    <h3>Microcertificado en Machine Learning para Big Data</h3>
+                    <p class="price">$15000</p>
+                    <button onclick="agregarAlCarrito('Microcertificado en Machine Learning para Big Data', 15000)">Agregar al carrito</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto">
+            <h2 class="section-title">Contáctanos</h2>
+            <form action="https://formsubmit.co/umb.alamtorresp2003@gmail.com" method="POST">
+                <!-- Evitar captcha automático -->
+                <input type="hidden" name="_captcha" value="false">
+
+                <!-- Página de gracias después del envío -->
+                <input type="hidden" name="_next" value="https://tusitio.com/gracias.html">
+
+                <!-- Campos del formulario -->
+                <input type="text" name="name" placeholder="Nombre" required>
+                <input type="email" name="email" placeholder="Correo electrónico" required>
+                <textarea name="message" placeholder="Mensaje" rows="5" required></textarea>
+
+                <!-- Botón enviar -->
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+
+
+
+
+
+        </section>
+
+        <section id="carrito">
+            <h2 class="section-title">Carrito de Compras</h2>
+            <div id="cart-items"></div>
+            <div id="total"></div>
+            <div id="paypal-button"></div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Infinity IT Solutions. Todos los derechos reservados.</p>
+    </footer> 
+</body>
+</html>
